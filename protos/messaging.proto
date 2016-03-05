@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.tibial.messaging";
+option java_outer_classname = "TibialMessaging";
+option objc_class_prefix = "HLW";
+
+package messaging;
+
+// The greeting service definition.
+service SenderService {
+// Sends a message
+rpc SendMessage (Message) returns (MessageReply) {}
+}
+
+// The request message containing the user's name.
+message Message {
+string body = 1;
+}
+
+// The response message containing the greetings
+message MessageReply {
+string reply = 1;
+}
