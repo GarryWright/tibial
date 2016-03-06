@@ -24,7 +24,12 @@ type Context struct {
 func  initOnce() *Context {
 	c := new(Context)
 	c.HelloCount = 30
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	message_server_seed := os.Getenv("MESSAGE_SERVER")
+
+	if message_server_seed == "" {
+		message_server_seed = "localhost"
+	}
+	conn, err := grpc.Dial(message_server_seed+":50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -93,7 +98,7 @@ func main() {
 	Get("/:num", (*c).SayHelloNum).               // Add a router
 	Get("/remote", (*c).SayHelloRemote)               // Add a router
 	t := time.Now()
-	c.logger.Printf("Listening on 3000 %d-%02d-%02d %02d:%02d:%02d\n", t.Year(), t.Month(), t.Day(),
+	c.logger.Printf("Now Listening on 3000 %d-%02d-%02d %02d:%02d:%02d\n", t.Year(), t.Month(), t.Day(),
 		t.Hour(), t.Minute(), t.Second())
 	defer c.conn.Close()
 	http.ListenAndServe("localhost:3000", router)   // Start the server!
